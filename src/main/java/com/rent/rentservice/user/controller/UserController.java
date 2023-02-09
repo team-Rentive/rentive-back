@@ -6,10 +6,7 @@ import com.rent.rentservice.user.request.LoginForm;
 import com.rent.rentservice.user.service.UserService;
 import com.rent.rentservice.util.session.SessionUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -42,7 +39,7 @@ public class UserController {
         userService.logout(session);
     }
 
-    @PostMapping(value = "/api/v1/changePw")
+    @PatchMapping(value = "/api/v1/changePw")
     public void changePw(@RequestBody @Valid ChangePwForm request, HttpSession session) throws Exception {
         userService.changePw(request, session);
     }
