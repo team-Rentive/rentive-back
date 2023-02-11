@@ -64,7 +64,6 @@ public class PostServiceTest {
                 .email("test@test.com")
                 .phoneNumber("01012345678")
                 .password("1234")
-                .address("경기도")
                 .build();
         userService.join(joinRequest);
 
