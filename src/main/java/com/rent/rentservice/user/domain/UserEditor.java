@@ -17,15 +17,12 @@ public class UserEditor {
 
     private String password;
 
-    private String address;
-
     @Builder
-    public UserEditor(String name, String nickName, String phoneNumber, String email, String password, String address) {
+    public UserEditor(String name, String nickName, String phoneNumber, String email, String password) {
         this.name = name;
         this.nickName = nickName;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
-        this.address = address;
     }
 }

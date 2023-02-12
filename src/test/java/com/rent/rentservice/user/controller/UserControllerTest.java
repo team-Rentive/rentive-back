@@ -66,7 +66,6 @@ class UserControllerTest {
                 .email("test@test.com")
                 .phoneNumber("01012345678")
                 .password("1234")
-                .address("경기도")
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -87,7 +86,6 @@ class UserControllerTest {
         assertEquals("닉네임", user.getNickName());
         assertEquals("test@test.com", user.getEmail());
         assertEquals("1234", aes256.decrypt(user.getPassword()));
-        assertEquals("경기도", user.getAddress());
     }
 
     @Test
@@ -101,7 +99,6 @@ class UserControllerTest {
                 .email("test@test.com")
                 .phoneNumber("")
                 .password("1234")
-                .address("경기도")
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -132,7 +129,6 @@ class UserControllerTest {
                 .email("test@test.com")
                 .phoneNumber("01012345678")
                 .password(aes256.encrypt("1234"))
-                .address("경기도")
                 .build();
 
         userRepository.save(user);

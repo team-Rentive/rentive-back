@@ -100,5 +100,4 @@ class MailServiceTest {
             mailService.authNumCheck(request);
         });
     }
-
 }

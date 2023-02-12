@@ -54,7 +54,6 @@ public class UserService {
                         .email(request.getEmail())
                         .phoneNumber(request.getPhoneNumber())
                         .password(aes256.encrypt(request.getPassword()))
-                        .address(request.getAddress())
                         .build();
 
         // 생성된 User 객체 저장
@@ -115,7 +114,6 @@ public class UserService {
                         .email(user.getEmail())
                         .phoneNumber(user.getPhoneNumber())
                         .password(aes256.encrypt(request.getNewPassword()))
-                        .address(user.getAddress())
                         .build();
 
         // UserEditor => 새로운 유저 객체 생성 => UPDATE

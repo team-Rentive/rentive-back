@@ -47,7 +47,6 @@ class UserServiceTest {
                 .email("test@test.com")
                 .phoneNumber("01012345678")
                 .password("1234")
-                .address("경기도")
                 .build();
 
         //when
@@ -61,7 +60,6 @@ class UserServiceTest {
         assertEquals("test@test.com", user.getEmail());
         assertEquals("01012345678", user.getPhoneNumber());
         assertEquals("1234", aes256.decrypt(user.getPassword()));
-        assertEquals("경기도", user.getAddress());
     }
 
     @Test
@@ -75,7 +73,6 @@ class UserServiceTest {
                 .email("test@test.com")
                 .phoneNumber("01012345678")
                 .password("1234")
-                .address("경기도")
                 .build();
 
         userService.join(firstMember);
@@ -86,7 +83,6 @@ class UserServiceTest {
                 .email("test@test.com")
                 .phoneNumber("01012345678")
                 .password("1234")
-                .address("경기도")
                 .build();
 
         //expected
@@ -106,7 +102,6 @@ class UserServiceTest {
                 .email("test.com")
                 .phoneNumber("01012345678")
                 .password("1234")
-                .address("경기도")
                 .build();
 
         //expected
@@ -128,7 +123,6 @@ class UserServiceTest {
                 .email("test@test.com")
                 .phoneNumber("01012345678")
                 .password(aes256.encrypt("1234"))
-                .address("경기도")
                 .build();
 
         userRepository.save(user);
