@@ -77,6 +77,7 @@ public class PostService {
         // 세션에 등록된 사용자의 게시글에 수정 삭제 권한 부여 -> 예외처리
         checkPostAuth(session, existPost);
 
+        // todo 게시글 비교 후 바꾸지 않고 게시글 덮어씌우기
         if(existPost.getTitle() != postUpdateForm.getTitle())
             existPost.setTitle(postUpdateForm.getTitle());
         if(existPost.getText() != postUpdateForm.getText())

@@ -24,7 +24,7 @@ public class PostController {
     private final PostService postService;
 
     // 전체 조회
-    @GetMapping(value = "/Home/item-list")
+    @GetMapping(value = "/home/item-list")
     public List<Post> list() {
         List<Post> posts = postRepository.findAll();
 
@@ -32,27 +32,28 @@ public class PostController {
     }
 
     // 검색에 따른 전체 조회
-    @GetMapping(value = "/Home/item-list?")
+    @GetMapping(value = "/home/item-list?")
     public List<Post> searchList(@RequestParam SearchForm request) {
         List<Post> searchPosts = postService.findBySearch(request);
         return searchPosts;
     }
 
     // 게시글 CREATE
-    @PostMapping(value = "/Home/item-list/post")
+    @PostMapping(value = "/home/item-list/post")
     public void create(@RequestBody @Valid PostCreateForm request,HttpSession session) throws Exception{
         postService.create(request, session);
     }
 
     // 아이템 상세 조회 + 조회수 증가
-    @GetMapping(value = "/Home/item-list/{id}")
+    @GetMapping(value = "/home/item-list/{id}")
     public Post item_detail(@RequestParam @PathVariable("id") Long request) throws Exception {
         Post post = postService.postDetail(request);
         return post;
     }
 
     // 아이템 업데이트
-    @PatchMapping(value = "/Home/item-list/update-{id}")
+    // todo session 정보 제거
+    @PatchMapping(value = "/home/item-list/update-{id}")
     public Post itemUpdate(@RequestBody PostUpdateForm postUpdateForm, @PathVariable("id") Long id,HttpSession session) throws Exception{
         Post updatePost = postService.update(id, postUpdateForm, session);
 
@@ -60,7 +61,7 @@ public class PostController {
     }
 
     // 아이템 삭제
-    @DeleteMapping(value = "/Home/item-list/delete-{id}")
+    @DeleteMapping(value = "/home/item-list/delete-{id}")
     public void itemDelete(@PathVariable("id") Long id, HttpSession session) {
         postService.delete(id, session);
     }

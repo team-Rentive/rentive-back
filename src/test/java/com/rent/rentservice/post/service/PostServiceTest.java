@@ -85,7 +85,6 @@ public class PostServiceTest {
         //given
         PostCreateForm postRequest = PostCreateForm.builder()
                 .title("제목 테스트")
-                .favorite(0)
                 .text("내용 테스트")
                 .build();
 
@@ -105,7 +104,6 @@ public class PostServiceTest {
         // given
         PostCreateForm postRequest = PostCreateForm.builder()
                 .title("제목 테스트")
-                .favorite(0)
                 .text("내용 테스트")
                 .build();
 
@@ -165,7 +163,6 @@ public class PostServiceTest {
         // given
         PostCreateForm postRequest = PostCreateForm.builder()
                 .title("제목")
-                .favorite(0)
                 .text("내용")
                 .build();
 
@@ -219,7 +216,6 @@ public class PostServiceTest {
         //게시글 생성
         PostCreateForm postRequest = PostCreateForm.builder()
                 .title("제목 테스트")
-                .favorite(0)
                 .text("내용 테스트")
                 .build();
 
@@ -248,7 +244,6 @@ public class PostServiceTest {
         //게시글 생성
         PostCreateForm postRequest = PostCreateForm.builder()
                 .title("제목 테스트")
-                .favorite(0)
                 .text("내용 테스트")
                 .build();
 
@@ -272,7 +267,6 @@ public class PostServiceTest {
         //게시글 생성
         PostCreateForm postRequest = PostCreateForm.builder()
                 .title("제목 테스트")
-                .favorite(0)
                 .text("내용 테스트")
                 .build();
 

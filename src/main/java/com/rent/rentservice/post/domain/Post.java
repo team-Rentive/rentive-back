@@ -8,7 +8,9 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 //todo category
 
@@ -23,6 +25,12 @@ public class Post {
     private String title;
     @CreationTimestamp @Temporal(TemporalType.TIMESTAMP)
     private Date regDate;
+
+    @CreationTimestamp @Temporal(TemporalType.TIMESTAMP)
+    private Date limitDate;
+
+    private String category;
+
     private int favorite;
     @Column(columnDefinition = "TEXT")
     private String text;

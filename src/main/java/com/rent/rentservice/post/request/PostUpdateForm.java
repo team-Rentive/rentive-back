@@ -13,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class PostUpdateForm {
 
+    //todo db에서 값을 불러와서 setting 해주기
     private String title;
 
     private String text;

@@ -104,7 +104,6 @@ public class PostControllerTest {
         // given
         PostCreateForm postRequest = PostCreateForm.builder()
                 .title("제목 테스트")
-                .favorite(0)
                 .text("내용 테스트")
                 .build();
 
@@ -135,7 +134,6 @@ public class PostControllerTest {
         // 1. 아이템 게시글 저장
         PostCreateForm postRequest = PostCreateForm.builder()
                 .title("제목 테스트")
-                .favorite(0)
                 .text("내용 테스트")
                 .build();
 
@@ -194,7 +192,6 @@ public class PostControllerTest {
         // 1. 아이템 게시글 저장
         PostCreateForm postRequest = PostCreateForm.builder()
                 .title("제목")
-                .favorite(0)
                 .text("내용")
                 .build();
 
@@ -222,7 +219,6 @@ public class PostControllerTest {
         //게시글 저장
         PostCreateForm postRequest = PostCreateForm.builder()
                 .title("제목")
-                .favorite(0)
                 .text("내용")
                 .build();
 
@@ -256,7 +252,6 @@ public class PostControllerTest {
         //게시글 저장
         PostCreateForm postRequest = PostCreateForm.builder()
                 .title("제목")
-                .favorite(0)
                 .text("내용")
                 .build();
 

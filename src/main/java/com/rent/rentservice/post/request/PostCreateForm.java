@@ -17,12 +17,13 @@ public class PostCreateForm {
     @NotBlank(message = "내용을 입력해 주세요")
     private String text;
 
-    private int favorite;
+    private Date limitDate;
 
+    private
     @Builder
-    public PostCreateForm(String title, String text, int favorite) {
+    public PostCreateForm(String title, String text, Date limitDate) {
         this.title = title;
         this.text = text;
-        this.favorite = favorite;
+        this.limitDate = limitDate;
     }
 }

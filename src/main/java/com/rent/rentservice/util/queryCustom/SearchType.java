@@ -9,6 +9,7 @@ public enum SearchType {
     writer("writer"),
     titleAndContext("context");
 
+
     @Getter
     private final String value;
 
