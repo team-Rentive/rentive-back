@@ -19,7 +19,6 @@ public class PostCreateForm {
 
     private Date limitDate;
 
-    private
     @Builder
     public PostCreateForm(String title, String text, Date limitDate) {
         this.title = title;
