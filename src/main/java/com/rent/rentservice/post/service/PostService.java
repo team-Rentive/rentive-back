@@ -1,5 +1,6 @@
 package com.rent.rentservice.post.service;
 
+import com.rent.rentservice.category.repository.CategoryRepository;
 import com.rent.rentservice.post.domain.Post;
 import com.rent.rentservice.post.exception.NonePostException;
 import com.rent.rentservice.post.exception.SessionNotFoundException;
@@ -26,6 +27,7 @@ import static com.rent.rentservice.util.session.SessionUtil.*;
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
 
     // 글 등록
     public void create(PostCreateForm request,HttpSession session) throws Exception{
@@ -38,22 +40,23 @@ public class PostService {
         User loginSessionID = userRepository.findById(getLoginMemberIdn(session))
                 .orElseThrow(UserNotFoundException::new);
 
-        Post post = Post.builder()
-                .userID(loginSessionID)
-                .title(request.getTitle())
-                .text(request.getText())
-                .favorite(0)
-                .viewCount(0)
-                .build();
+        //todo 대여가능 일수 달력으로 설정
 
-        postRepository.save(post);
+        postRepository.save(
+                Post.builder()
+                        .userID(loginSessionID)
+                        .title(request.getTitle())
+                        .text(request.getText())
+                        .favorite(0)
+                        .viewCount(0)
+                        .category(categoryRepository.findByCategoryValue(request.getCategory()))
+                        .build());
     }
 
     // 검색에 따른 게시글 조회
     @Transactional
     public List<Post> findBySearch(SearchForm condition) {
-        List<Post> searchPostList = postRepository.findBySearchUsingQueryDsl(condition);
-        return searchPostList;
+        return postRepository.findBySearchUsingQueryDsl(condition);
     }
 
     // 게시글 상세 조회
@@ -64,7 +67,6 @@ public class PostService {
         //Post post = postRepository.updateViewCount(requestID);
 
         byId.setViewCount(byId.getViewCount() + 1);
-
 
         return byId;
     }

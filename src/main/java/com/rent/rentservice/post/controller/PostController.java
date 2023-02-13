@@ -24,7 +24,7 @@ public class PostController {
     private final PostService postService;
 
     // 전체 조회
-    @GetMapping(value = "/home/item-list")
+    @GetMapping(value = "/home")
     public List<Post> list() {
         List<Post> posts = postRepository.findAll();
 
@@ -32,7 +32,7 @@ public class PostController {
     }
 
     // 검색에 따른 전체 조회
-    @GetMapping(value = "/home/item-list?")
+    @GetMapping(value = "/home/item-list")
     public List<Post> searchList(@RequestParam SearchForm request) {
         List<Post> searchPosts = postService.findBySearch(request);
         return searchPosts;
@@ -52,7 +52,6 @@ public class PostController {
     }
 
     // 아이템 업데이트
-    // todo session 정보 제거
     @PatchMapping(value = "/home/item-list/update-{id}")
     public Post itemUpdate(@RequestBody PostUpdateForm postUpdateForm, @PathVariable("id") Long id,HttpSession session) throws Exception{
         Post updatePost = postService.update(id, postUpdateForm, session);
