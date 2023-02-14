@@ -25,16 +25,13 @@ public class PostController {
     // 전체 조회
     @GetMapping(value = "/Home/item-list")
     public List<Post> list() {
-        List<Post> posts = postRepository.findAll();
-
-        return posts;
+        return postRepository.findAll();
     }
 
     // 검색에 따른 전체 조회
     @GetMapping(value = "/Home/item-list?")
     public List<Post> searchList(@RequestParam SearchForm request) {
-        List<Post> searchPosts = postService.findBySearch(request);
-        return searchPosts;
+        return postService.findBySearch(request);
     }
 
     // 게시글 CREATE
@@ -46,16 +43,13 @@ public class PostController {
     // 아이템 상세 조회 + 조회수 증가
     @GetMapping(value = "/Home/item-list/{id}")
     public Post item_detail(@PathVariable("id") Long request) {
-        Post post = postService.postDetail(request);
-        return post;
+        return postService.postDetail(request);
     }
 
     // 아이템 업데이트
     @PatchMapping(value = "/home/item-list/update-{id}")
-    public Post itemUpdate(@RequestBody PostUpdateForm postUpdateForm, @PathVariable("id") Long id,HttpSession session) throws Exception{
-        Post updatePost = postService.update(id, postUpdateForm, session);
-
-        return updatePost;
+    public void itemUpdate(@RequestBody PostUpdateForm postUpdateForm, @PathVariable("id") Long id,HttpSession session) throws Exception{
+        postService.update(id, postUpdateForm, session);
     }
 
     // 아이템 삭제

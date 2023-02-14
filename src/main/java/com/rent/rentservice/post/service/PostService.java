@@ -1,6 +1,7 @@
 package com.rent.rentservice.post.service;
 
 import com.rent.rentservice.post.domain.Post;
+import com.rent.rentservice.post.domain.PostEditor;
 import com.rent.rentservice.post.exception.SessionNotFoundException;
 import com.rent.rentservice.post.repository.PostRepository;
 import com.rent.rentservice.post.request.PostCreateForm;
@@ -61,37 +62,40 @@ public class PostService {
     public Post postDetail(Long requestID){
         Post post = postRepository.updateViewCount(requestID);
 
+        post.viewCountUp(post.getViewCount() + 1);
         return post;
     }
 
     // 게시글 업데이트
-    public Post update(Long id, PostUpdateForm postUpdateForm, HttpSession session) {
-        Post existPost = postRepository.findById(id)
+    @Transactional
+    public void update(Long id, PostUpdateForm postUpdateForm, HttpSession session) {
+
+        // 게시글 조회
+        Post post = postRepository.findById(id)
                 .orElse(null);
 
         // 세션에 등록된 사용자의 게시글에 수정 삭제 권한 부여 -> 예외처리
-        checkPostAuth(session, existPost);
+        checkPostAuth(session, id);
 
-        if(existPost.getTitle() != postUpdateForm.getTitle())
-            existPost.setTitle(postUpdateForm.getTitle());
-        if(existPost.getText() != postUpdateForm.getText())
-            existPost.setText(postUpdateForm.getText());
+        // postEditor 객체 생성
+        PostEditor postEditor = PostEditor.builder()
+                .title(postUpdateForm.getTitle())
+                .text(postUpdateForm.getText())
+                .favorite(post.getFavorite())
+                .viewCount(post.getViewCount())
+                .build();
 
-        postRepository.save(existPost);
-
-        return existPost;
+        // Update
+        post.updatePost(postEditor);
 
     }
 
     // 게시글 삭제
     public void delete(Long id, HttpSession session) {
-        Post existPost = postRepository.findById(id)
-                .orElse(null);
-
         // 세션에 등록된 사용자의 게시글에 수정 삭제 권한 부여 -> 예외처리
-        checkPostAuth(session, existPost);
+        checkPostAuth(session, id);
 
-        postRepository.delete(existPost);
+        postRepository.deleteById(id);
     }
 //    /**
 //     * @description build the post constructor

@@ -1,14 +1,21 @@
 package com.rent.rentservice.util.session;
 
 import com.rent.rentservice.post.domain.Post;
+import com.rent.rentservice.post.domain.QPost;
 import com.rent.rentservice.post.exception.UpdatePostSessionException;
+import com.rent.rentservice.post.repository.PostRepository;
 import com.rent.rentservice.user.domain.User;
 import com.rent.rentservice.user.request.UserSessionInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.constraints.Null;
+import java.util.Optional;
+
+import static com.rent.rentservice.post.domain.QPost.post;
 
 public class SessionUtil {
 
@@ -16,6 +23,9 @@ public class SessionUtil {
     private static final String LOGIN_MEMBER_EMAIL = "userEmail";
     private static final String LOGIN_MEMBER_IP= "ip";
     private static final String LOGIN_MEMBER_IDN= "userIdn";
+
+    @Autowired
+    private static PostRepository postRepository;
 
     // 인스턴스화 방지
     private SessionUtil() {
@@ -30,9 +40,12 @@ public class SessionUtil {
     }
 
     // Post, Session 권한 확인 -> 예외처리
-    public static void checkPostAuth(HttpSession session, Post post) {
+    public static void checkPostAuth(HttpSession session, Long id) {
+        Post post = postRepository.findById(id).orElse(null);
+
         Long postUserId = post.getUserID().getUserId();
         Long sessionUserId = getLoginMemberIdn(session);
+
         if(sessionUserId != postUserId) {
             throw new UpdatePostSessionException();
         }

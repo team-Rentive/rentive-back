@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,6 +17,8 @@ import java.util.Date;
 
 @Entity
 @Data
+@Where(clause = "deleteCheck = NULL")
+@SQLDelete(sql = "UPDATE post SET deleted = true WHERE postId = ?")
 public class Post {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postID;
@@ -32,7 +36,7 @@ public class Post {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private PostCategory category;
 
-    //private boolean deleteCheck = Boolean.FALSE;
+    private boolean deleted = Boolean.FALSE;
 
     protected Post() {}
     @Builder @QueryProjection
@@ -45,6 +49,18 @@ public class Post {
         this.title = title;
         this.favorite = favorite;
         this.text = text;
+        this.viewCount = viewCount;
+    }
+
+    public void updatePost(PostEditor postEditor) {
+        this.title = postEditor.getTitle();
+        this.text = postEditor.getText();
+        this.userID = postEditor.getUserId();
+        this.favorite = postEditor.getFavorite();
+        this.viewCount = postEditor.getViewCount();
+    }
+
+    public void viewCountUp(int viewCount) {
         this.viewCount = viewCount;
     }
 }
