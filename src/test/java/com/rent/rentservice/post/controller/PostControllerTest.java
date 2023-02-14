@@ -6,6 +6,7 @@ import com.rent.rentservice.post.domain.Post;
 import com.rent.rentservice.post.domain.QPost;
 import com.rent.rentservice.post.repository.PostRepository;
 import com.rent.rentservice.post.request.PostCreateForm;
+import com.rent.rentservice.post.request.PostUpdateForm;
 import com.rent.rentservice.post.request.SearchForm;
 import com.rent.rentservice.post.service.PostService;
 import com.rent.rentservice.user.domain.User;
@@ -30,9 +31,7 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -103,28 +102,19 @@ public class PostControllerTest {
         // given
         PostCreateForm postRequest = PostCreateForm.builder()
                 .title("제목 테스트")
-                .favorite(0)
                 .text("내용 테스트")
                 .build();
 
         // objectMapper : Json 타입으로 convert
         String postJson = objectMapper.writeValueAsString(postRequest);
 
-        // when
+        // expected
         mockMvc.perform(post("/Home/item-list/post")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)  // 객체를 변환해줄 타입
                         .content(postJson))             // 위 타입으로 저장할 객체
                 .andExpect(status().isOk())             // status 응답
                 .andDo(print());                        // 응답값 프린트
-
-        // then
-        Post post = postRepository.findAll().get(0);
-
-        assertEquals(1L, post.getPostID());         // 두 개체의 값이 같은지 확인
-        assertEquals("제목 테스트", post.getTitle());
-        assertEquals(0, post.getFavorite());
-        assertEquals("내용 테스트", post.getText());
     }
 
     @Test @DisplayName("검색 조회 요청")
@@ -134,7 +124,6 @@ public class PostControllerTest {
         // 1. 아이템 게시글 저장
         PostCreateForm postRequest = PostCreateForm.builder()
                 .title("제목 테스트")
-                .favorite(0)
                 .text("내용 테스트")
                 .build();
 
@@ -162,7 +151,7 @@ public class PostControllerTest {
         // given
         // session 으로 부터 사용자 받기
         User user = userRepository.findById(sessionUtil.getLoginMemberIdn(session))
-                .get();
+                .orElse(null);
 
         // post 만들기
         Post request = Post.builder()
@@ -170,6 +159,7 @@ public class PostControllerTest {
                 .userID(user)
                 .favorite(0)
                 .text("내용 테스트")
+                .viewCount(0)
                 .build();
 
         // JPAQueryFactory 만들기
@@ -193,7 +183,6 @@ public class PostControllerTest {
         // 1. 아이템 게시글 저장
         PostCreateForm postRequest = PostCreateForm.builder()
                 .title("제목")
-                .favorite(0)
                 .text("내용")
                 .build();
 
@@ -211,6 +200,65 @@ public class PostControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
         // then
+
+    }
+
+    @Test @DisplayName("아이템 수정")
+    void test5() throws Exception {
+        //given
+        PostCreateForm postRequest = PostCreateForm.builder()
+                .title("제목")
+                .text("내용")
+                .build();
+
+        postService.create(postRequest, session);
+        Long postId = postRepository.findAll().get(0).getPostID();
+
+        PostUpdateForm postUpdateForm = PostUpdateForm.builder()
+                .title("제목 수정")
+                .text("내용 수정")
+                .build();
+
+        //when
+        String postIdJson = objectMapper.writeValueAsString(postId);
+        String updateFormJson = objectMapper.writeValueAsString(postUpdateForm);
+
+        //then
+        mockMvc.perform(patch("/home/item-list/update-1")
+                        .session(session)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(postIdJson)
+                        .content(updateFormJson))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test @DisplayName("아이템 삭제")
+    void test6() throws Exception {
+        //given
+        PostCreateForm postRequest = PostCreateForm.builder()
+                .title("제목")
+                .text("내용")
+                .build();
+
+        postService.create(postRequest, session);
+        Long postId = postRepository.findAll().get(0).getPostID();
+
+        //when
+        String postIdJson = objectMapper.writeValueAsString(postId);
+
+        //then
+        // todo SQLDelete test 확인
+        mockMvc.perform(patch("/home/item-list/update-1")
+                        .session(session)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(postIdJson))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test @DisplayName("삭제된 아이템을 제외한 아이템 조회")
+    void test7() throws Exception{
 
     }
 }

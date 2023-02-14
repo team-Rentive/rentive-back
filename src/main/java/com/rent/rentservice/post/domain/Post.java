@@ -5,6 +5,7 @@ import com.rent.rentservice.category.domain.PostCategory;
 import com.rent.rentservice.user.domain.User;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
@@ -17,8 +18,9 @@ import java.util.Date;
 
 @Entity
 @Data
-@Where(clause = "deleteCheck = NULL")
+@Where(clause = "deleted = false")
 @SQLDelete(sql = "UPDATE post SET deleted = true WHERE postId = ?")
+@NoArgsConstructor
 public class Post {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postID;
@@ -38,7 +40,6 @@ public class Post {
 
     private boolean deleted = Boolean.FALSE;
 
-    protected Post() {}
     @Builder @QueryProjection
     public Post(User userID,
                 String title,

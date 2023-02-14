@@ -60,7 +60,8 @@ public class PostService {
 
     // 게시글 상세 조회
     public Post postDetail(Long requestID){
-        Post post = postRepository.updateViewCount(requestID);
+        Post post = postRepository.findById(requestID)
+                .orElse(null);
 
         post.viewCountUp(post.getViewCount() + 1);
         return post;
@@ -75,7 +76,7 @@ public class PostService {
                 .orElse(null);
 
         // 세션에 등록된 사용자의 게시글에 수정 삭제 권한 부여 -> 예외처리
-        checkPostAuth(session, id);
+        checkPostAuth(session, post);
 
         // postEditor 객체 생성
         PostEditor postEditor = PostEditor.builder()
@@ -92,8 +93,10 @@ public class PostService {
 
     // 게시글 삭제
     public void delete(Long id, HttpSession session) {
+        Post post = postRepository.findById(id).orElse(null);
+
         // 세션에 등록된 사용자의 게시글에 수정 삭제 권한 부여 -> 예외처리
-        checkPostAuth(session, id);
+        checkPostAuth(session, post);
 
         postRepository.deleteById(id);
     }

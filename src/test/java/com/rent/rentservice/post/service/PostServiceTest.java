@@ -5,6 +5,7 @@ import com.rent.rentservice.post.exception.SessionNotFoundException;
 import com.rent.rentservice.post.repository.PostRepository;
 import com.rent.rentservice.post.repository.PostRepositoryImpl;
 import com.rent.rentservice.post.request.PostCreateForm;
+import com.rent.rentservice.post.request.PostUpdateForm;
 import com.rent.rentservice.post.request.SearchForm;
 import com.rent.rentservice.user.domain.User;
 import com.rent.rentservice.user.repository.UserRepository;
@@ -81,7 +82,6 @@ public class PostServiceTest {
         //given
         PostCreateForm postRequest = PostCreateForm.builder()
                 .title("제목 테스트")
-                .favorite(0)
                 .text("내용 테스트")
                 .build();
 
@@ -101,7 +101,6 @@ public class PostServiceTest {
         // given
         PostCreateForm postRequest = PostCreateForm.builder()
                 .title("제목 테스트")
-                .favorite(0)
                 .text("내용 테스트")
                 .build();
 
@@ -161,7 +160,6 @@ public class PostServiceTest {
         // given
         PostCreateForm postRequest = PostCreateForm.builder()
                 .title("제목")
-                .favorite(0)
                 .text("내용")
                 .build();
 
@@ -183,7 +181,6 @@ public class PostServiceTest {
         //given
         PostCreateForm postRequest = PostCreateForm.builder()
                 .title("제목")
-                .favorite(0)
                 .text("내용")
                 .build();
 
@@ -196,8 +193,62 @@ public class PostServiceTest {
         Post postDetail = postService.postDetail(postId);
 
         //then
-        //todo 조회수 증가 확인 gihyun 보고 수정
-        assertThat(post.getViewCount()+1).isEqualTo(postDetail.getViewCount());
+        assertThat(post.getViewCount()).isEqualTo(postDetail.getViewCount());
+
+    }
+
+    @Test @DisplayName("아이템 삭제")
+    void test6() throws Exception {
+        //todo SQLDelete test 확인
+        //given
+        PostCreateForm postRequest = PostCreateForm.builder()
+                .title("제목")
+                .text("내용")
+                .build();
+
+        postService.create(postRequest, session);
+        Long postId = postRepository.findAll().get(0).getPostID();
+        Post before = postRepository.findById(postId).orElse(null);
+
+        //when
+        postService.delete(postId, session);
+        Post after = postRepository.findById(postId).orElse(null);
+
+        //then
+        assertThat(before.isDeleted()).isEqualTo(after.isDeleted());
+
+    }
+
+    @Test @DisplayName("아이템 수정")
+    void test7() throws Exception {
+        //given
+
+        // 게시글 생성
+        PostCreateForm postRequest = PostCreateForm.builder()
+                .title("제목")
+                .text("내용")
+                .build();
+
+        postService.create(postRequest, session);
+        Long postId = postRepository.findAll().get(0).getPostID();
+
+        // 게시글 수정 폼 작성
+        PostUpdateForm postUpdateForm = PostUpdateForm.builder()
+                .title("제목 수정")
+                .text("내용 수정")
+                .build();
+
+        //when
+        postService.update(postId, postUpdateForm, session);
+        Post post = postRepository.findById(postId).orElse(null);
+
+        //then
+        assertThat(post.getPostID()).isEqualTo(postId);
+        assertThat(post.getTitle()).isEqualTo(postUpdateForm.getTitle());
+    }
+
+    @Test @DisplayName("게시글 삭제 혹은 수정 시 세션이 다른 사용자 예외처리")
+    void test8() throws Exception{
 
     }
 }

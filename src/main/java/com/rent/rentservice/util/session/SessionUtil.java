@@ -24,8 +24,6 @@ public class SessionUtil {
     private static final String LOGIN_MEMBER_IP= "ip";
     private static final String LOGIN_MEMBER_IDN= "userIdn";
 
-    @Autowired
-    private static PostRepository postRepository;
 
     // 인스턴스화 방지
     private SessionUtil() {
@@ -40,9 +38,7 @@ public class SessionUtil {
     }
 
     // Post, Session 권한 확인 -> 예외처리
-    public static void checkPostAuth(HttpSession session, Long id) {
-        Post post = postRepository.findById(id).orElse(null);
-
+    public static void checkPostAuth(HttpSession session, Post post) {
         Long postUserId = post.getUserID().getUserId();
         Long sessionUserId = getLoginMemberIdn(session);
 
