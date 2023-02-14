@@ -4,6 +4,7 @@ import com.rent.rentservice.post.domain.Post;
 import com.rent.rentservice.post.exception.SessionNotFoundException;
 import com.rent.rentservice.post.repository.PostRepository;
 import com.rent.rentservice.post.request.PostCreateForm;
+import com.rent.rentservice.post.request.PostUpdateForm;
 import com.rent.rentservice.user.domain.User;
 import com.rent.rentservice.user.exception.UserNotFoundException;
 import com.rent.rentservice.user.repository.UserRepository;
@@ -18,6 +19,8 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.rent.rentservice.util.session.SessionUtil.checkPostAuth;
 
 @Service
 @RequiredArgsConstructor
@@ -59,6 +62,36 @@ public class PostService {
         Post post = postRepository.updateViewCount(requestID);
 
         return post;
+    }
+
+    // 게시글 업데이트
+    public Post update(Long id, PostUpdateForm postUpdateForm, HttpSession session) {
+        Post existPost = postRepository.findById(id)
+                .orElse(null);
+
+        // 세션에 등록된 사용자의 게시글에 수정 삭제 권한 부여 -> 예외처리
+        checkPostAuth(session, existPost);
+
+        if(existPost.getTitle() != postUpdateForm.getTitle())
+            existPost.setTitle(postUpdateForm.getTitle());
+        if(existPost.getText() != postUpdateForm.getText())
+            existPost.setText(postUpdateForm.getText());
+
+        postRepository.save(existPost);
+
+        return existPost;
+
+    }
+
+    // 게시글 삭제
+    public void delete(Long id, HttpSession session) {
+        Post existPost = postRepository.findById(id)
+                .orElse(null);
+
+        // 세션에 등록된 사용자의 게시글에 수정 삭제 권한 부여 -> 예외처리
+        checkPostAuth(session, existPost);
+
+        postRepository.delete(existPost);
     }
 //    /**
 //     * @description build the post constructor

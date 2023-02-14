@@ -1,6 +1,7 @@
 package com.rent.rentservice.post.domain;
 
 import com.querydsl.core.annotations.QueryProjection;
+import com.rent.rentservice.category.domain.PostCategory;
 import com.rent.rentservice.user.domain.User;
 import lombok.Builder;
 import lombok.Data;
@@ -27,6 +28,11 @@ public class Post {
     @Column(columnDefinition = "TEXT")
     private String text;
     private int viewCount;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private PostCategory category;
+
+    //private boolean deleteCheck = Boolean.FALSE;
 
     protected Post() {}
     @Builder @QueryProjection

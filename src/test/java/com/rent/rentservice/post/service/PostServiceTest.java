@@ -196,7 +196,7 @@ public class PostServiceTest {
         Post postDetail = postService.postDetail(postId);
 
         //then
-        //todo 조회수 증가 확인
+        //todo 조회수 증가 확인 gihyun 보고 수정
         assertThat(post.getViewCount()+1).isEqualTo(postDetail.getViewCount());
 
     }

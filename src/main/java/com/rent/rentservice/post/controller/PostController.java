@@ -3,6 +3,7 @@ package com.rent.rentservice.post.controller;
 import com.rent.rentservice.post.domain.Post;
 import com.rent.rentservice.post.repository.PostRepository;
 import com.rent.rentservice.post.request.PostCreateForm;
+import com.rent.rentservice.post.request.PostUpdateForm;
 import com.rent.rentservice.post.request.SearchForm;
 import com.rent.rentservice.post.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
+
+import static com.rent.rentservice.util.session.SessionUtil.checkPostAuth;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,4 +49,19 @@ public class PostController {
         Post post = postService.postDetail(request);
         return post;
     }
+
+    // 아이템 업데이트
+    @PatchMapping(value = "/home/item-list/update-{id}")
+    public Post itemUpdate(@RequestBody PostUpdateForm postUpdateForm, @PathVariable("id") Long id,HttpSession session) throws Exception{
+        Post updatePost = postService.update(id, postUpdateForm, session);
+
+        return updatePost;
+    }
+
+    // 아이템 삭제
+    @DeleteMapping(value = "/home/item-list/delete-{id}")
+    public void itemDelete(@PathVariable("id") Long id, HttpSession session) {
+        postService.delete(id, session);
+    }
+
 }
