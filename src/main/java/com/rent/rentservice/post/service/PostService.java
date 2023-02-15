@@ -29,6 +29,11 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
+    // 전체 게시글 조회
+    public void allItem() {
+        postRepository.findAll();
+    }
+
     // 글 등록
     public void create(PostCreateForm request,HttpSession session) throws Exception{
         //세션 아웃 검사

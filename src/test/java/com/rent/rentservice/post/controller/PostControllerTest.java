@@ -109,7 +109,7 @@ public class PostControllerTest {
         String postJson = objectMapper.writeValueAsString(postRequest);
 
         // expected
-        mockMvc.perform(post("/Home/item-list/post")
+        mockMvc.perform(post("/home/item-list/post")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)  // 객체를 변환해줄 타입
                         .content(postJson))             // 위 타입으로 저장할 객체
@@ -137,7 +137,7 @@ public class PostControllerTest {
         String searchJson = objectMapper.writeValueAsString(request);
 
         // expected
-        mockMvc.perform(get("/Home/item-list?")
+        mockMvc.perform(get("/home/item-list?")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(searchJson))
@@ -194,7 +194,7 @@ public class PostControllerTest {
         // when
         String detailJson = objectMapper.writeValueAsString(postIdn);
 
-        mockMvc.perform(get("/Home/item-list/1")
+        mockMvc.perform(get("/home/item-list/1")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(detailJson))
                 .andExpect(status().isOk())
