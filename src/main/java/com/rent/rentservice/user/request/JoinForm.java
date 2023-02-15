@@ -4,6 +4,8 @@ import com.rent.rentservice.user.domain.User;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.sql.JoinFragment;
 
 import javax.validation.constraints.NotBlank;
 
@@ -31,6 +33,7 @@ public class JoinForm {
     @NotBlank(message = "비밀번호를 입력해주세요")
     private String password;
 
+    public JoinForm() {}
     @Builder
     public JoinForm(String name, String nickName, String email, String phoneNumber, String password) {
         this.name = name;

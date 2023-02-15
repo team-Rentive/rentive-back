@@ -17,6 +17,7 @@ public class PostCreateForm {
     @NotBlank(message = "내용을 입력해 주세요")
     private String text;
 
+    public PostCreateForm() {}
     @Builder
     public PostCreateForm(String title, String text) {
         this.title = title;

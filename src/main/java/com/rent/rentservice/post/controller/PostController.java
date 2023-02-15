@@ -30,7 +30,7 @@ public class PostController {
     }
 
     // 검색에 따른 전체 조회
-    @GetMapping(value = "/home/item-list?")
+    @GetMapping(value = "/home/item-list/search")
     public List<Post> searchList(@RequestParam SearchForm request) {
         return postService.findBySearch(request);
     }
