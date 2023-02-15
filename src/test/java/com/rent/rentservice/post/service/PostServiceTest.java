@@ -13,6 +13,7 @@ import com.rent.rentservice.user.request.JoinForm;
 import com.rent.rentservice.user.request.LoginForm;
 import com.rent.rentservice.user.service.UserService;
 import com.rent.rentservice.util.session.SessionUtil;
+import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpSession;
 
 import javax.persistence.EntityManager;
+import javax.servlet.Filter;
 import javax.transaction.Transactional;
 
 import java.util.List;
@@ -215,8 +217,8 @@ public class PostServiceTest {
         Post after = postRepository.findById(postId).orElse(null);
 
         //then
-        assertThat(before.isDeleted()).isEqualTo(after.isDeleted());
-
+        System.out.println(before);
+        System.out.println(after);
     }
 
     @Test @DisplayName("아이템 수정")

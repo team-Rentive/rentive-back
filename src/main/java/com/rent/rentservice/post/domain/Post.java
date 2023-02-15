@@ -6,12 +6,12 @@ import com.rent.rentservice.user.domain.User;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
+import org.springframework.data.repository.query.Param;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import java.util.Date;
 
 //todo category
@@ -19,7 +19,7 @@ import java.util.Date;
 @Entity
 @Data
 @Where(clause = "deleted = false")
-@SQLDelete(sql = "UPDATE post SET deleted = true WHERE postId = ?")
+@SQLDelete(sql = "UPDATE post SET deleted = true WHERE postid = ?")
 @NoArgsConstructor
 public class Post {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
