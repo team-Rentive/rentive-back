@@ -17,7 +17,7 @@ import static com.rent.rentservice.util.session.SessionUtil.checkPostAuth;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:400", allowedHeaders = "*", allowCredentials = "true")
 public class PostController {
 
     private final PostRepository postRepository;

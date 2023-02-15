@@ -20,6 +20,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:400", allowedHeaders = "*", allowCredentials = "true")
 public class UserController {
 
     private final UserService userService;
