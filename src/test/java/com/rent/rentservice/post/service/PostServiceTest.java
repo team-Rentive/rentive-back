@@ -276,6 +276,7 @@ public class PostServiceTest {
         PageRequest pageRequest = new PageRequest();
         pageRequest.setPage(1);
         pageRequest.setSize(10);
+        pageRequest.setProperty("countOfViewCount");
         pageRequest.setDirection(Sort.Direction.DESC);
 
         Pageable pageable = pageRequest.of();

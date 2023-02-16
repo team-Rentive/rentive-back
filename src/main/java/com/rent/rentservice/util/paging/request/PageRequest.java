@@ -11,7 +11,13 @@ public class PageRequest {
     private int size = 10;
     private Direction direction = Direction.DESC;
 
+    private String property;
+
     public PageRequest() {}
+
+    public void setProperty(String property) {
+        this.property = property;
+    }
 
     public void setPage(int page) {
         this.page = page <= 0 ? 1 : page;
@@ -28,6 +34,6 @@ public class PageRequest {
     }
 
     public org.springframework.data.domain.PageRequest of() {
-        return org.springframework.data.domain.PageRequest.of(page - 1, size, direction, "create_date");
+        return org.springframework.data.domain.PageRequest.of(page - 1, size, direction, property);
     }
 }

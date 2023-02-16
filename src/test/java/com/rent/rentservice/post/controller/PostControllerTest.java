@@ -278,6 +278,7 @@ public class PostControllerTest {
         PageRequest pageRequest = new PageRequest();
         pageRequest.setPage(1);
         pageRequest.setSize(10);
+        pageRequest.setProperty("createAt");
         pageRequest.setDirection(Sort.Direction.DESC);
 
         String pageRequestJson = objectMapper.writeValueAsString(pageRequest);

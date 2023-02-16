@@ -79,7 +79,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
             for(Sort.Order order : pageable.getSort()) {
                 Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
                 switch (order.getProperty()) { // PageRequest of() 확인
-                    case "create_date":
+                    case "createAt":
                         return new OrderSpecifier(direction, post.regDate);
                     case "countOfFavorite":
                         return new OrderSpecifier(direction, post.favorite);
