@@ -11,7 +11,7 @@ public class PageRequest {
     private int size = 10;
     private Direction direction = Direction.DESC;
 
-    private String property;
+    private String property = "createAt";
 
     public PageRequest() {}
 

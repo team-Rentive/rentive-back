@@ -28,44 +28,44 @@ public class PostController {
     private final PostService postService;
 
     // 전체 조회
-    @GetMapping(value = "/home/item-list")
+    @GetMapping(value = "/home")
     public void list() {
         postService.allItem();
     }
 
     // 전체 조회 (Using Paging Custom)
-    @GetMapping(value = "/home")
+    @GetMapping(value = "/api/v1/itemList")
     public PageImpl<Post> getAll(PageRequest pageRequest) {
         Pageable pageable = pageRequest.of();
         return postService.allPagingItem(pageable);
     }
 
     // 검색에 따른 전체 조회
-    @GetMapping(value = "/home/item-list/search")
+    @GetMapping(value = "/api/v1/itemSearch/search")
     public List<Post> searchList(@RequestParam SearchForm request) {
         return postService.findBySearch(request);
     }
 
     // 게시글 CREATE
-    @PostMapping(value = "/home/item-list/post")
+    @PostMapping(value = "/api/v1/itemCreate")
     public void create(@RequestBody @Valid PostCreateForm request,HttpSession session) throws Exception{
         postService.create(request, session);
     }
 
     // 아이템 상세 조회 + 조회수 증가
-    @GetMapping(value = "/home/item-list/{id}")
+    @GetMapping(value = "/api/v1/itemDetail/{id}")
     public Post item_detail(@PathVariable("id") Long request) {
         return postService.postDetail(request);
     }
 
     // 아이템 업데이트
-    @PatchMapping(value = "/home/item-list/update-{id}")
+    @PatchMapping(value = "/api/v1/itemUpdate/{id}")
     public void itemUpdate(@RequestBody PostUpdateForm postUpdateForm, @PathVariable("id") Long id,HttpSession session) throws Exception{
         postService.update(id, postUpdateForm, session);
     }
 
     // 아이템 삭제
-    @DeleteMapping(value = "/home/item-list/delete-{id}")
+    @DeleteMapping(value = "/api/v1/itemDelete/{id}")
     public void itemDelete(@PathVariable("id") Long id, HttpSession session) {
         postService.delete(id, session);
     }
