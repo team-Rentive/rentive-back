@@ -1,8 +1,15 @@
 package com.rent.rentservice.post.repository;
 
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.rent.rentservice.post.domain.Post;
 import com.rent.rentservice.post.request.SearchForm;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import com.rent.rentservice.util.queryCustom.SearchUtil;
 
@@ -13,32 +20,31 @@ import java.util.Optional;
 import static com.rent.rentservice.post.domain.QPost.post;
 
 /**
- * @description QueryDslÀ» ÀÌ¿ëÇØ Äõ¸®¸¦ ÀÛ¼ºÇÒ Å¬·¡½º
+ * @description QueryDslï¿½ï¿½ ï¿½Ì¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Û¼ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
  * @description Implements PostRepositoryCustom
- * @author ±è±âÇö
+ * @author ï¿½ï¿½ï¿½ï¿½ï¿½
  * @since 23.01.20
  */
 
 @Repository
 public class PostRepositoryImpl implements PostRepositoryCustom{
-    // todo : °Ë»ö ½Ã ·Î±×ÀÎ ÇÑ »ç¿ëÀÚÀÇ ÁÖ¼Ò¿¡ ¸Â´Â ¾ÆÀÌÅÛ Á¶È¸µÇµµ·Ï ¼öÁ¤
     private final JPAQueryFactory jpaQueryFactory;
 
     public PostRepositoryImpl(EntityManager em) {
         this.jpaQueryFactory = new JPAQueryFactory(em);
     }
 
-    // °Ë»ö custom method
+    // ï¿½Ë»ï¿½ custom method
     @Override
     public List<Post> findBySearchUsingQueryDsl(SearchForm condition) {
-        // »ı¼ºÇÑ where Á¶°ÇÀı + ½Ã°£¿¡ µû¸¥ ³»¸²Â÷¼ø
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ where ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ + ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         return jpaQueryFactory
                 .selectFrom(post)
                 .where(SearchUtil.isSearchable(condition.getContent(), condition.getType()))
                 .fetch();
     }
 
-    // ¾ÆÀÌÅÛ Á¶È¸¼ö Áõ°¡ ¸Ş¼Òµå
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ş¼Òµï¿½
     @Override
     public Post updateViewCount(Long requestId) {
         jpaQueryFactory
@@ -51,5 +57,37 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
                 .selectFrom(post)
                 .where(post.postID.eq(requestId))
                 .fetchOne();
+    }
+
+    @Override
+    public PageImpl<Post> findByOffsetPaging(Pageable pageable) {
+        List<Post> result = jpaQueryFactory
+                .select(post)
+                .from(post)
+                .orderBy(PostSort(pageable))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(result, pageable, result.size());
+    }
+
+    private OrderSpecifier<?> PostSort(Pageable pageable) {
+        // Pageable ì •ë ¬ ì¡°ê±´ null í™•ì¸
+        if(!pageable.getSort().isEmpty()) {
+            // ì •ë ¬ ê°’ì´ ìˆë‹¤ë©´ ê°€ì ¸ì˜¨ë‹¤
+            for(Sort.Order order : pageable.getSort()) {
+                Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
+                switch (order.getProperty()) { // PageRequest of() í™•ì¸
+                    case "create_date":
+                        return new OrderSpecifier(direction, post.regDate);
+                    case "countOfFavorite":
+                        return new OrderSpecifier(direction, post.favorite);
+                    case "countOfViewCount":
+                        return new OrderSpecifier(direction, post.viewCount);
+                }
+            }
+        }
+        return null;
     }
 }

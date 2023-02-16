@@ -6,7 +6,11 @@ import com.rent.rentservice.post.request.PostCreateForm;
 import com.rent.rentservice.post.request.PostUpdateForm;
 import com.rent.rentservice.post.request.SearchForm;
 import com.rent.rentservice.post.service.PostService;
+import com.rent.rentservice.util.paging.request.PageRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -27,6 +31,13 @@ public class PostController {
     @GetMapping(value = "/home/item-list")
     public void list() {
         postService.allItem();
+    }
+
+    // 전체 조회 (Using Paging Custom)
+    @GetMapping(value = "/home")
+    public PageImpl<Post> getAll(PageRequest pageRequest) {
+        Pageable pageable = pageRequest.of();
+        return postService.allPagingItem(pageable);
     }
 
     // 검색에 따른 전체 조회

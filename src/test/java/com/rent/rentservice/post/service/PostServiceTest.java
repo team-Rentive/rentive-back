@@ -12,6 +12,7 @@ import com.rent.rentservice.user.repository.UserRepository;
 import com.rent.rentservice.user.request.JoinForm;
 import com.rent.rentservice.user.request.LoginForm;
 import com.rent.rentservice.user.service.UserService;
+import com.rent.rentservice.util.paging.request.PageRequest;
 import com.rent.rentservice.util.session.SessionUtil;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +21,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockHttpSession;
 
 import javax.persistence.EntityManager;
@@ -251,6 +255,56 @@ public class PostServiceTest {
 
     @Test @DisplayName("게시글 삭제 혹은 수정 시 세션이 다른 사용자 예외처리")
     void test8() throws Exception{
+
+    }
+
+    @Test @DisplayName("전체 게시글 조회 (using Paging)")
+    void test9() throws Exception{
+        //given
+        PostCreateForm post1 = PostCreateForm.builder()
+                .title("제목1")
+                .text("내용1")
+                .build();
+        PostCreateForm post2 = PostCreateForm.builder()
+                .title("제목2")
+                .text("내용2")
+                .build();
+
+        postService.create(post1, session);
+        postService.create(post2, session);
+
+        PageRequest pageRequest = new PageRequest();
+        pageRequest.setPage(1);
+        pageRequest.setSize(10);
+        pageRequest.setDirection(Sort.Direction.DESC);
+
+        Pageable pageable = pageRequest.of();
+
+        //when
+        PageImpl<Post> posts = postService.allPagingItem(pageable);
+
+        //then
+        System.out.println(posts.getTotalElements());
+        System.out.println(posts.getContent());
+    }
+
+    @Test @DisplayName("")
+    void test10() throws Exception{
+
+    }
+
+    @Test @DisplayName("")
+    void test11() throws Exception{
+
+    }
+
+    @Test @DisplayName("")
+    void test12() throws Exception{
+
+    }
+
+    @Test @DisplayName("")
+    void test13() throws Exception{
 
     }
 }

@@ -17,12 +17,16 @@ import com.rent.rentservice.user.service.UserService;
 import com.rent.rentservice.util.encryption.AES256;
 import com.rent.rentservice.util.queryCustom.SearchType;
 import com.rent.rentservice.util.session.SessionUtil;
+import com.rent.rentservice.util.paging.request.PageRequest;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
@@ -256,9 +260,55 @@ public class PostControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
-
-    @Test @DisplayName("삭제된 아이템을 제외한 아이템 조회")
+    @Test @DisplayName("전체 게시글 페이징 처리")
     void test7() throws Exception{
+        //given
+        PostCreateForm post1 = PostCreateForm.builder()
+                .title("제목1")
+                .text("내용1")
+                .build();
+        PostCreateForm post2 = PostCreateForm.builder()
+                .title("제목2")
+                .text("내용2")
+                .build();
+
+        postService.create(post1, session);
+        postService.create(post2, session);
+
+        PageRequest pageRequest = new PageRequest();
+        pageRequest.setPage(1);
+        pageRequest.setSize(10);
+        pageRequest.setDirection(Sort.Direction.DESC);
+
+        String pageRequestJson = objectMapper.writeValueAsString(pageRequest);
+
+        // expected
+        mockMvc.perform(get("/home")
+                .content(pageRequestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test @DisplayName("")
+    void test8() throws Exception{
 
     }
+    @Test @DisplayName("")
+    void test9() throws Exception{
+
+    }
+    @Test @DisplayName("")
+    void test10() throws Exception{
+
+    }
+    @Test @DisplayName("")
+    void test11() throws Exception{
+
+    }
+    @Test @DisplayName("")
+    void test12() throws Exception{
+
+    }
+
 }

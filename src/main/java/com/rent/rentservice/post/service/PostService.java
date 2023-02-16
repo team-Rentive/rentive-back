@@ -12,14 +12,14 @@ import com.rent.rentservice.user.repository.UserRepository;
 import com.rent.rentservice.post.request.SearchForm;
 import com.rent.rentservice.util.session.SessionUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.rent.rentservice.util.session.SessionUtil.checkPostAuth;
 
@@ -34,6 +34,10 @@ public class PostService {
         postRepository.findAll();
     }
 
+    // 전체 게시글 조회(Using Paging Custom)
+    public PageImpl<Post> allPagingItem(Pageable pageable) {
+        return postRepository.findByOffsetPaging(pageable);
+    }
     // 글 등록
     public void create(PostCreateForm request,HttpSession session) throws Exception{
         //세션 아웃 검사
