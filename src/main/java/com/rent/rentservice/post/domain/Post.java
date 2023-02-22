@@ -45,12 +45,14 @@ public class Post {
                 String title,
                 int favorite,
                 String text,
-                int viewCount) {
+                int viewCount,
+                PostCategory category) {
         this.userID = userID;
         this.title = title;
         this.favorite = favorite;
         this.text = text;
         this.viewCount = viewCount;
+        this.category = category;
     }
 
     public void updatePost(PostEditor postEditor) {

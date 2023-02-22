@@ -1,5 +1,6 @@
 package com.rent.rentservice.post.service;
 
+import com.rent.rentservice.category.domain.PostCategory;
 import com.rent.rentservice.post.domain.Post;
 import com.rent.rentservice.post.domain.PostEditor;
 import com.rent.rentservice.post.exception.SessionNotFoundException;
@@ -38,6 +39,7 @@ public class PostService {
     public PageImpl<Post> allPagingItem(Pageable pageable) {
         return postRepository.findByOffsetPaging(pageable);
     }
+
     // 글 등록
     public void create(PostCreateForm request,HttpSession session) throws Exception{
         //세션 아웃 검사
@@ -55,6 +57,7 @@ public class PostService {
                 .text(request.getText())
                 .favorite(0)
                 .viewCount(0)
+                .category(new PostCategory(request.getCategoryName()))
                 .build();
 
         postRepository.save(post);
@@ -109,34 +112,4 @@ public class PostService {
 
         postRepository.deleteById(id);
     }
-//    /**
-//     * @description build the post constructor
-//     * @param post
-//     * @return post builder
-//     */
-//    private Post convertEntityInPost(@NotNull Post post) {
-//        return post.builder()
-//                .title(post.getTitle())
-//                .favorite(post.getFavorite())
-//                .text(post.getText())
-//                .build();
-//    }
-//
-//    /**
-//     * @description Find all post by post ID
-//     * @param ID
-//     * @return new post object
-//     */
-//    public List<Post> findByID(Long ID) {
-//        List<Post> postList = postRepository.findByPostID(ID);
-//        List<Post> postListByID = new ArrayList<>();
-//
-//        if(postList.isEmpty()) return postListByID; //todo exception 처리
-//
-//        for(Post post : postList) {
-//            postListByID.add(this.convertEntityInPost(post));
-//        }
-//
-//        return postListByID;
-//    }
 }

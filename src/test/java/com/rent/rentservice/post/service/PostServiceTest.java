@@ -289,9 +289,31 @@ public class PostServiceTest {
         System.out.println(posts.getContent());
     }
 
-    @Test @DisplayName("")
+    @Test @DisplayName("아이템 생성시 카테고리 저장")
     void test10() throws Exception{
+        // given
+        PostCreateForm post1 = PostCreateForm.builder()
+                .title("제목1")
+                .text("내용1")
+                .categoryName("IT")
+                .build();
 
+        PostCreateForm post2 = PostCreateForm.builder()
+                .title("제목2")
+                .text("내용2")
+                .categoryName("가전")
+                .build();
+
+        // when
+        postService.create(post1, session);
+        postService.create(post2, session);
+
+        for (Post post : postRepository.findAll()) {
+            System.out.println(post.getCategory());
+        }
+
+
+        // then
     }
 
     @Test @DisplayName("")

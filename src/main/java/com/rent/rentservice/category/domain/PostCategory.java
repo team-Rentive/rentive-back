@@ -3,6 +3,7 @@ package com.rent.rentservice.category.domain;
 import com.rent.rentservice.post.domain.Post;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.logging.log4j.util.Base64Util;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -23,5 +24,9 @@ public class PostCategory {
 
     public void addPostIntoCategory(Post post) {
         this.postList.add(post);
+    }
+
+    public PostCategory(String categoryName) {
+        this.categoryName = categoryName;
     }
 }
